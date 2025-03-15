@@ -1,13 +1,27 @@
-terraform {
-  required_providers {
-    proxmox = {
-      source  = "bpg/proxmox"
-      version = "0.73.1"
+
+
+resource "proxmox_virtual_environment_vm" "ubuntu_vm" {
+  name        = "k8s-master"
+  node_name   = "pve"
+  description = "K8s Master Node"
+  started     = true
+  agent {
+    enabled = true
+  }
+  clone {
+    vm_id = 5000
+  }
+  initialization {
+    ip_config {
+      ipv4 {
+        address = "192.168.0.100/24"
+        gateway = "192.168.0.1"
+      }
     }
   }
-}
 
-provider "proxmox" {
-  endpoint  = var.api_url
-  api_token = "${var.api_token_id}=${var.api_token_secret}"
+
+
+
+
 }
